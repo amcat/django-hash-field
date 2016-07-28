@@ -1,4 +1,5 @@
 from django.db import models
+import binascii
 
 class HashField(models.BinaryField):
     description = ('HashField is related to some other field in a model and'
@@ -10,3 +11,8 @@ class HashField(models.BinaryField):
         kwargs.setdefault('editable', False)
         super(HashField, self).__init__(*args, **kwargs)
         
+    def to_python(self, value):
+        return binascii.hexlify(value).decode("ascii")
+
+    def get_prep_value(self, value):
+        return binascii.unhexlify(value)
