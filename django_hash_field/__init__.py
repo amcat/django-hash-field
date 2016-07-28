@@ -11,8 +11,10 @@ class HashField(models.BinaryField):
         kwargs.setdefault('editable', False)
         super(HashField, self).__init__(*args, **kwargs)
         
-    def to_python(self, value):
-        return binascii.hexlify(value).decode("ascii")
+    def from_db_value(self, value, expression, connection, context):
+        if value:
+            return binascii.hexlify(value).decode("ascii")
 
     def get_prep_value(self, value):
-        return binascii.unhexlify(value)
+        if value:
+            return binascii.unhexlify(value)

@@ -5,10 +5,11 @@ import hashlib
 
 class TestHash(TestCase):
     def test_decode(self):
-
         obj = b"12345"
-        
         hash = hashlib.sha1(obj).hexdigest()
-        h = HashTest.objects.create(hash_field=hash, i=1)
 
+        h = HashTest.objects.create(hash_field=hash, i=1)
         self.assertEqual(hash, h.hash_field)
+
+        a = HashTest.objects.get(i=1)
+        self.assertEqual(hash, a.hash_field)
